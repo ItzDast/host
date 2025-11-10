@@ -1,78 +1,351 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dastan</title>
-	<link rel="stylesheet" type="text/css" href="cubik.css">
-    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOtIZInlnxZBB-j8kX60T0qNBwXkOAFKmLg&s" type="image/png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dastan</title>
+  <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOtIZInlnxZBB-j8kX60T0qNBwXkOAFKmLg&s" type="image/png">
+  <style>
+    /* ====== style.css (вложен) ====== */
+    :root{
+      --bg:#04070a;
+      --accent:#7df3ff;
+      --accent2:#ff8bd1;
+      --glass: rgba(255,255,255,0.06);
+      --ui: rgba(255,255,255,0.08);
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(ellipse at center, rgba(7,10,18,1) 0%, var(--bg) 60%);
+      color:#e6f7ff;
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    /* Canvas fills screen */
+    #game{
+      display:block;
+      width:100vw;
+      height:100vh;
+      background: transparent;
+    }
+
+    /* UI overlay */
+    .ui{
+      position:fixed;
+      left:16px;
+      top:16px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      z-index:20;
+    }
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(6px);
+      padding:8px 12px;
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+      font-weight:600;
+      font-size:14px;
+      color:#dffcff;
+    }
+    .controls{position:fixed; right:16px; bottom:16px; background:var(--ui); padding:10px 12px; border-radius:12px; font-size:13px}
+    .brand{position:fixed; left:16px; bottom:16px; font-size:12px; color:rgba(255,255,255,0.6)}
+
+    /* small hint pulse */
+    .hint{font-size:12px; opacity:0.9}
+
+    /* responsive */
+    @media (max-width:700px){
+      .panel{font-size:13px}
+      .controls{font-size:12px}
+    }
+  </style>
 </head>
 <body>
-	<div>связаться по номеру +996990776747</div>	
-	<div class="cube">
-    	<div class="verx verx1"></div>
-    	<div class="verx verx2"></div>
-    	<div class="verx verx3"></div>
-    	<div class="verx verx4"></div>
-    	<div class="verx verx5"></div>
-    	<div class="verx verx6"></div>
-    	<div class="verx verx7"></div>
-    	<div class="verx verx8"></div>
-    	<div class="verx verx9"></div>
+  <!-- Поле игры -->
+  <canvas id="game"></canvas>
 
-    	<div class="vniz vniz1"></div>
-    	<div class="vniz vniz2"></div>
-    	<div class="vniz vniz3"></div>
-    	<div class="vniz vniz4"></div>
-    	<div class="vniz vniz5"></div>
-    	<div class="vniz vniz6"></div>
-    	<div class="vniz vniz7"></div>
-    	<div class="vniz vniz8"></div>
-    	<div class="vniz vniz9"></div>
+  <!-- Простой UI -->
+  <div class="ui">
+    <div class="panel">🔥 Счёт: <span id="score">0</span></div>
+    <div class="panel">⏱️ Время: <span id="time">0</span>s</div>
+  </div>
+  <div class="controls">Управление: <b>WASD</b> / <b>Стрелки</b> — собери энергию</div>
+  <div class="brand">dastan.space • Dastan: Cosmic Explorer</div>
 
-    	<div class="pravo pravo1"></div>
-    	<div class="pravo pravo2"></div>
-    	<div class="pravo pravo3"></div>
-    	<div class="pravo pravo4"></div>
-    	<div class="pravo pravo5"></div>
-    	<div class="pravo pravo6"></div>
-    	<div class="pravo pravo7"></div>
-    	<div class="pravo pravo8"></div>
-    	<div class="pravo pravo9"></div>
+  <script>
+    /* ====== script.js (вложен) ====== */
+    // Локальные настройки
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
 
-    	<div class="levo levo1"></div>
-    	<div class="levo levo2"></div>
-    	<div class="levo levo3"></div>
-    	<div class="levo levo4"></div>
-    	<div class="levo levo5"></div>
-    	<div class="levo levo6"></div>
-    	<div class="levo levo7"></div>
-    	<div class="levo levo8"></div>
-    	<div class="levo levo9"></div>
+    let w = canvas.width = innerWidth;
+    let h = canvas.height = innerHeight;
 
-    	<div class="center center1"></div>
-    	<div class="center center2"></div>
-    	<div class="center center3"></div>
-    	<div class="center center4"></div>
-    	<div class="center center5"></div>
-    	<div class="center center6"></div>
-    	<div class="center center7"></div>
-    	<div class="center center8"></div>
-    	<div class="center center9"></div>
+    // Игровое состояние
+    let stars = [];
+    let particles = [];
+    let orbs = [];
+    let score = 0;
+    let startTime = performance.now();
 
-    	<div class="czadi czadi1"></div>
-    	<div class="czadi czadi2"></div>
-    	<div class="czadi czadi3"></div>
-    	<div class="czadi czadi4"></div>
-    	<div class="czadi czadi5"></div>
-    	<div class="czadi czadi6"></div>
-    	<div class="czadi czadi7"></div>
-    	<div class="czadi czadi8"></div>
-    	<div class="czadi czadi9"></div>
-    </div>
+    const player = {
+      x: w/2,
+      y: h/2,
+      vx:0,
+      vy:0,
+      speed: 0.25,
+      radius: 12,
+      angle: 0
+    };
+
+    // Управление
+    const keys = {};
+    addEventListener('keydown', e=>{ keys[e.key.toLowerCase()]=true; });
+    addEventListener('keyup', e=>{ keys[e.key.toLowerCase()]=false; });
+
+    // Resize
+    addEventListener('resize', ()=>{
+      w = canvas.width = innerWidth;
+      h = canvas.height = innerHeight;
+    });
+
+    // Звёзды фоновые — парраллакс
+    function createStars(n=160){
+      stars = [];
+      for(let i=0;i<n;i++){
+        stars.push({
+          x: Math.random()*w,
+          y: Math.random()*h,
+          z: Math.random()*1.5 + 0.2,
+          size: Math.random()*1.6
+        });
+      }
+    }
+
+    // Орб энергии
+    function spawnOrb(){
+      const r = 8 + Math.random()*10;
+      orbs.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r,
+        t: 0,
+        wobble: Math.random()*Math.PI*2
+      });
+    }
+
+    // Частицы для эффекта сбора
+    function spawnParticles(x,y,count=18){
+      for(let i=0;i<count;i++){
+        particles.push({
+          x,y,
+          vx: (Math.random()-0.5)*4,
+          vy: (Math.random()-0.5)*4,
+          life: 40 + Math.random()*20
+        });
+      }
+    }
+
+    // And initial
+    createStars();
+    for(let i=0;i<6;i++) spawnOrb();
+
+    function update(dt){
+      // Время
+      const now = performance.now();
+      document.getElementById('time').textContent = Math.floor((now - startTime)/1000);
+
+      // Управление движением
+      const accel = 0.02 + Math.min(Math.floor(score/10)*0.005, 0.06);
+      if(keys['arrowup']||keys['w']) player.vy -= accel*dt;
+      if(keys['arrowdown']||keys['s']) player.vy += accel*dt;
+      if(keys['arrowleft']||keys['a']) player.vx -= accel*dt;
+      if(keys['arrowright']||keys['d']) player.vx += accel*dt;
+
+      // Трение
+      player.vx *= 0.995;
+      player.vy *= 0.995;
+
+      player.x += player.vx*dt;
+      player.y += player.vy*dt;
+
+      // экран-обёртывание
+      if(player.x < -50) player.x = w+50;
+      if(player.x > w+50) player.x = -50;
+      if(player.y < -50) player.y = h+50;
+      if(player.y > h+50) player.y = -50;
+
+      // звезды смещаются в зависимости от скорости игрока
+      stars.forEach(s=>{
+        s.x -= player.vx*0.02* (1/s.z);
+        s.y -= player.vy*0.02* (1/s.z);
+        if(s.x < 0) s.x += w;
+        if(s.x > w) s.x -= w;
+        if(s.y < 0) s.y += h;
+        if(s.y > h) s.y -= h;
+      });
+
+      // орбы wobble
+      orbs.forEach(o=>{ o.t += 0.02*dt; o.x += Math.sin(o.t+o.wobble)*0.1; o.y += Math.cos(o.t+o.wobble)*0.1 });
+
+      // коллизия игрок-орб
+      for(let i=orbs.length-1;i>=0;i--){
+        const o = orbs[i];
+        const dx = o.x - player.x;
+        const dy = o.y - player.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < o.r + player.radius){
+          // собрали
+          score += 1 + Math.floor(score/15);
+          document.getElementById('score').textContent = score;
+          spawnParticles(o.x, o.y, 22);
+          orbs.splice(i,1);
+          // сложнее со временем: появляются больше
+          const toSpawn = 1 + Math.floor(score/8);
+          for(let k=0;k<toSpawn;k++) spawnOrb();
+        }
+      }
+
+      // частицы
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 1;
+        if(p.life <= 0) particles.splice(i,1);
+      }
+
+      // иногда создаём новый орб
+      if(Math.random() < 0.01 + Math.min(score*0.0008, 0.06)) spawnOrb();
+    }
+
+    function draw(){
+      // фон градиент
+      ctx.clearRect(0,0,w,h);
+
+      // слегка тёмный фон
+      const g = ctx.createLinearGradient(0,0,0,h);
+      g.addColorStop(0, '#041226');
+      g.addColorStop(1, '#02040a');
+      ctx.fillStyle = g;
+      ctx.fillRect(0,0,w,h);
+
+      // звёзды
+      for(const s of stars){
+        const alpha = 0.6 / s.z;
+        ctx.fillStyle = `rgba(210,240,255,${alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      // глубинные светящиеся орбы
+      for(const o of orbs){
+        const glow = Math.max(0.2, 0.6 + Math.sin(o.t*2)*0.3);
+        const rad = o.r;
+        // glow
+        const rg = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, rad*3);
+        rg.addColorStop(0, `rgba(125,243,255,${0.28*glow})`);
+        rg.addColorStop(0.4, `rgba(125,243,255,${0.14*glow})`);
+        rg.addColorStop(1, `rgba(3,6,9,0)`);
+        ctx.fillStyle = rg;
+        ctx.beginPath(); ctx.arc(o.x, o.y, rad*3,0,Math.PI*2); ctx.fill();
+        // core
+        ctx.fillStyle = `rgba(125,243,255,${0.95})`;
+        ctx.beginPath(); ctx.arc(o.x, o.y, rad*0.9,0,Math.PI*2); ctx.fill();
+      }
+
+      // частицы
+      for(const p of particles){
+        const a = Math.max(0, Math.min(1, p.life/60));
+        ctx.fillStyle = `rgba(255,220,200,${a})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2.2,0,Math.PI*2); ctx.fill();
+      }
+
+      // рисуем корабль (минималистично)
+      ctx.save();
+      ctx.translate(player.x, player.y);
+      const ang = Math.atan2(player.vy, player.vx) || player.angle;
+      ctx.rotate(ang + Math.PI/2);
+
+      // thruster glow
+      const thr = Math.min(1, Math.hypot(player.vx, player.vy)/2);
+      const tg = ctx.createRadialGradient(0,18,0,0,18,40);
+      tg.addColorStop(0, `rgba(255,120,60,${0.45*thr})`);
+      tg.addColorStop(1, `rgba(255,120,60,0)`);
+      ctx.fillStyle = tg;
+      ctx.beginPath(); ctx.ellipse(0,18,10,6,0,0,Math.PI*2); ctx.fill();
+
+      // hull
+      ctx.fillStyle = '#dffcff';
+      ctx.beginPath(); ctx.moveTo(0,-14); ctx.lineTo(10,8); ctx.lineTo(0,4); ctx.lineTo(-10,8); ctx.closePath(); ctx.fill();
+
+      // cockpit
+      ctx.fillStyle = '#020a14'; ctx.beginPath(); ctx.ellipse(0,-4,5,3,0,0,Math.PI*2); ctx.fill();
+
+      ctx.restore();
+
+      // subtle HUD center
+      ctx.font = '12px Inter, system-ui, Arial';
+      ctx.fillStyle = 'rgba(255,255,255,0.04)';
+      ctx.textAlign = 'center';
+      ctx.fillText('Dastan.space — Cosmic Explorer', w/2, h-18);
+    }
+
+    // Main loop
+    let last = performance.now();
+    function loop(now){
+      const dt = Math.min(40, now - last);
+      update(dt);
+      draw();
+      last = now;
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    // Начальный эффект: плавное появление
+    const fade = document.createElement('div');
+    // small accessibility: click to add impulse
+    addEventListener('click', (e)=>{
+      // толчок в сторону курсора
+      const dx = e.clientX - player.x;
+      const dy = e.clientY - player.y;
+      player.vx += dx*0.0006; player.vy += dy*0.0006;
+    });
+
+    // Простая подсказка: если долго не двигаются, появится орб рядом
+    let idle = 0;
+    setInterval(()=>{
+      idle++;
+      if(idle > 7){
+        // spawn nearby
+        const nx = (player.x + (Math.random()-0.5)*200 + w) % w;
+        const ny = (player.y + (Math.random()-0.5)*200 + h) % h;
+        orbs.push({x:nx,y:ny,r: 10 + Math.random()*8, t:0, wobble: Math.random()*10});
+        idle = 0;
+      }
+    }, 1000);
+
+    // reset idle on key
+    addEventListener('keydown', ()=>{ idle = 0; });
+
+    // touch controls: simple joystick
+    let touchStart = null;
+    addEventListener('touchstart', e=>{ touchStart = e.touches[0]; });
+    addEventListener('touchmove', e=>{ if(!touchStart) return; const t = e.touches[0]; const dx = t.clientX - touchStart.clientX; const dy = t.clientY - touchStart.clientY; player.vx += dx*0.0006; player.vy += dy*0.0006; touchStart = t; });
+    addEventListener('touchend', ()=>{ touchStart=null });
+
+    // small helper: focus canvas
+    canvas.tabIndex = 0;
+    canvas.style.outline = 'none';
+    canvas.addEventListener('mouseenter', ()=> canvas.focus());
+
+    // done
+  </script>
 </body>
-
 </html>
-
-
-
