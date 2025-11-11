@@ -1,351 +1,219 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dastan</title>
-  <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuOtIZInlnxZBB-j8kX60T0qNBwXkOAFKmLg&s" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>Сколько тебе дней?</title>
   <style>
-    /* ====== style.css (вложен) ====== */
-    :root{
-      --bg:#04070a;
-      --accent:#7df3ff;
-      --accent2:#ff8bd1;
-      --glass: rgba(255,255,255,0.06);
-      --ui: rgba(255,255,255,0.08);
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      flex-direction: column;
+      text-align: center;
+      font-family: Montserrat, sans-serif;
+      background-color: #151515;
     }
-    html,body{height:100%;}
-    body{
-      margin:0;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background: radial-gradient(ellipse at center, rgba(7,10,18,1) 0%, var(--bg) 60%);
-      color:#e6f7ff;
-      overflow:hidden;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    /* Canvas fills screen */
-    #game{
-      display:block;
-      width:100vw;
-      height:100vh;
-      background: transparent;
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
     }
 
-    /* UI overlay */
-    .ui{
-      position:fixed;
-      left:16px;
-      top:16px;
-      display:flex;
-      gap:10px;
-      align-items:center;
-      z-index:20;
+    .inputs {
+      display: flex;
+      border-radius: 12px;
+      border: 2px solid #ffffff15;
+      background: #ffffff15;
+      width: 225px;
+      margin: 0px auto 20px;
     }
-    .panel{
-      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      backdrop-filter: blur(6px);
-      padding:8px 12px;
-      border-radius:12px;
-      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-      font-weight:600;
-      font-size:14px;
-      color:#dffcff;
+
+    select {
+      padding: 10px 14px;
+      border: none;
+      background: none;
+      color: white;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s ease;
+      appearance: none;
     }
-    .controls{position:fixed; right:16px; bottom:16px; background:var(--ui); padding:10px 12px; border-radius:12px; font-size:13px}
-    .brand{position:fixed; left:16px; bottom:16px; font-size:12px; color:rgba(255,255,255,0.6)}
 
-    /* small hint pulse */
-    .hint{font-size:12px; opacity:0.9}
+    select:hover {
+      background: #ffffff15;
+    }
 
-    /* responsive */
-    @media (max-width:700px){
-      .panel{font-size:13px}
-      .controls{font-size:12px}
+    option {
+      background-color: #3a3a3a;
+      color: white;
+    }
+
+    button {
+      font-family: Montserrat, sans-serif;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: white;
+      color: #151515;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      box-shadow: inset 0 0 0 1px #ffffff15;
+      background: #151515;
+      color: white;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      line-height: 1.8;
+      background: #ffffff10;
+      padding: 20px 30px;
+      border-radius: 12px;
+      width: fit-content;
+      min-width: 250px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+
+    .result.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    label {
+      display: none;
+    }
+
+    #day {
+      border-radius: 10px 0 0 10px;
+      font-family: Montserrat, sans-serif;
+    }
+    #month {
+      font-family: Montserrat, sans-serif;
+    }
+    #year {
+      border-radius: 0 10px 10px 0;
+      font-family: Montserrat, sans-serif;
     }
   </style>
 </head>
 <body>
-  <!-- Поле игры -->
-  <canvas id="game"></canvas>
+  <div class="d1">
+  <h1>Сколько тебе дней?</h1>
 
-  <!-- Простой UI -->
-  <div class="ui">
-    <div class="panel">🔥 Счёт: <span id="score">0</span></div>
-    <div class="panel">⏱️ Время: <span id="time">0</span>s</div>
+  <div class="inputs">
+    <label for="day">День</label>
+    <select id="day" title="Выбери день"></select>
+
+    <label for="month">Месяц</label>
+    <select id="month" title="Выбери месяц"></select>
+
+    <label for="year">Год</label>
+    <select id="year" title="Выбери год"></select>
   </div>
-  <div class="controls">Управление: <b>WASD</b> / <b>Стрелки</b> — собери энергию</div>
-  <div class="brand">dastan.space • Dastan: Cosmic Explorer</div>
 
+  <button onclick="calculateAge()">Посчитать</button>
+  </div>
+  <div class="result" id="result"></div>
   <script>
-    /* ====== script.js (вложен) ====== */
-    // Локальные настройки
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
+    const daySelect = document.getElementById('day');
+    const monthSelect = document.getElementById('month');
+    const yearSelect = document.getElementById('year');
+    const result = document.getElementById('result');
 
-    let w = canvas.width = innerWidth;
-    let h = canvas.height = innerHeight;
+    const months = [
+      'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+      'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
 
-    // Игровое состояние
-    let stars = [];
-    let particles = [];
-    let orbs = [];
-    let score = 0;
-    let startTime = performance.now();
-
-    const player = {
-      x: w/2,
-      y: h/2,
-      vx:0,
-      vy:0,
-      speed: 0.25,
-      radius: 12,
-      angle: 0
-    };
-
-    // Управление
-    const keys = {};
-    addEventListener('keydown', e=>{ keys[e.key.toLowerCase()]=true; });
-    addEventListener('keyup', e=>{ keys[e.key.toLowerCase()]=false; });
-
-    // Resize
-    addEventListener('resize', ()=>{
-      w = canvas.width = innerWidth;
-      h = canvas.height = innerHeight;
+    months.forEach((m, i) => {
+      const opt = document.createElement('option');
+      opt.value = i + 1;
+      opt.textContent = m;
+      monthSelect.appendChild(opt);
     });
 
-    // Звёзды фоновые — парраллакс
-    function createStars(n=160){
-      stars = [];
-      for(let i=0;i<n;i++){
-        stars.push({
-          x: Math.random()*w,
-          y: Math.random()*h,
-          z: Math.random()*1.5 + 0.2,
-          size: Math.random()*1.6
-        });
+    const thisYear = new Date().getFullYear();
+    for (let y = thisYear; y >= 1900; y--) {
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      yearSelect.appendChild(opt);
+    }
+
+    function updateDays() {
+      const month = parseInt(monthSelect.value);
+      const year = parseInt(yearSelect.value);
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      daySelect.innerHTML = '';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        daySelect.appendChild(opt);
       }
     }
 
-    // Орб энергии
-    function spawnOrb(){
-      const r = 8 + Math.random()*10;
-      orbs.push({
-        x: Math.random()*w,
-        y: Math.random()*h,
-        r,
-        t: 0,
-        wobble: Math.random()*Math.PI*2
-      });
+    monthSelect.addEventListener('change', updateDays);
+    yearSelect.addEventListener('change', updateDays);
+    updateDays();
+
+    function calculateAge() {
+      const day = parseInt(daySelect.value);
+      const month = parseInt(monthSelect.value) - 1;
+      const year = parseInt(yearSelect.value);
+
+      const birthDate = new Date(year, month, day);
+      const now = new Date();
+
+      if (birthDate > now) {
+        result.textContent = 'Дата рождения не может быть в будущем!';
+        result.classList.add("visible");
+        return;
+      }
+
+      const diffMs = now - birthDate;
+      const seconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      let years = now.getFullYear() - year;
+      let monthsCurrent = now.getMonth() - month;
+      if (monthsCurrent < 0) {
+        years--;
+        monthsCurrent += 12;
+      }
+
+      const totalMonths = years * 12 + monthsCurrent;
+
+      result.innerHTML = `
+        <strong>Тебе:</strong><br>
+        🗓️ <b>${days.toLocaleString()}</b> дней<br>
+        📆 ${years} лет, ${monthsCurrent}месяцев<br>
+        🕓 всего <b>${totalMonths}</b> месяцев за жизнь<br>
+        ⏰ ${hours.toLocaleString()} часов<br>
+        ⏱️ ${minutes.toLocaleString()} минут<br>
+        ⏳ ${seconds.toLocaleString()} секунд
+      `;
+
+      result.classList.add("visible");
     }
-
-    // Частицы для эффекта сбора
-    function spawnParticles(x,y,count=18){
-      for(let i=0;i<count;i++){
-        particles.push({
-          x,y,
-          vx: (Math.random()-0.5)*4,
-          vy: (Math.random()-0.5)*4,
-          life: 40 + Math.random()*20
-        });
-      }
-    }
-
-    // And initial
-    createStars();
-    for(let i=0;i<6;i++) spawnOrb();
-
-    function update(dt){
-      // Время
-      const now = performance.now();
-      document.getElementById('time').textContent = Math.floor((now - startTime)/1000);
-
-      // Управление движением
-      const accel = 0.02 + Math.min(Math.floor(score/10)*0.005, 0.06);
-      if(keys['arrowup']||keys['w']) player.vy -= accel*dt;
-      if(keys['arrowdown']||keys['s']) player.vy += accel*dt;
-      if(keys['arrowleft']||keys['a']) player.vx -= accel*dt;
-      if(keys['arrowright']||keys['d']) player.vx += accel*dt;
-
-      // Трение
-      player.vx *= 0.995;
-      player.vy *= 0.995;
-
-      player.x += player.vx*dt;
-      player.y += player.vy*dt;
-
-      // экран-обёртывание
-      if(player.x < -50) player.x = w+50;
-      if(player.x > w+50) player.x = -50;
-      if(player.y < -50) player.y = h+50;
-      if(player.y > h+50) player.y = -50;
-
-      // звезды смещаются в зависимости от скорости игрока
-      stars.forEach(s=>{
-        s.x -= player.vx*0.02* (1/s.z);
-        s.y -= player.vy*0.02* (1/s.z);
-        if(s.x < 0) s.x += w;
-        if(s.x > w) s.x -= w;
-        if(s.y < 0) s.y += h;
-        if(s.y > h) s.y -= h;
-      });
-
-      // орбы wobble
-      orbs.forEach(o=>{ o.t += 0.02*dt; o.x += Math.sin(o.t+o.wobble)*0.1; o.y += Math.cos(o.t+o.wobble)*0.1 });
-
-      // коллизия игрок-орб
-      for(let i=orbs.length-1;i>=0;i--){
-        const o = orbs[i];
-        const dx = o.x - player.x;
-        const dy = o.y - player.y;
-        const dist = Math.sqrt(dx*dx+dy*dy);
-        if(dist < o.r + player.radius){
-          // собрали
-          score += 1 + Math.floor(score/15);
-          document.getElementById('score').textContent = score;
-          spawnParticles(o.x, o.y, 22);
-          orbs.splice(i,1);
-          // сложнее со временем: появляются больше
-          const toSpawn = 1 + Math.floor(score/8);
-          for(let k=0;k<toSpawn;k++) spawnOrb();
-        }
-      }
-
-      // частицы
-      for(let i=particles.length-1;i>=0;i--){
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= 1;
-        if(p.life <= 0) particles.splice(i,1);
-      }
-
-      // иногда создаём новый орб
-      if(Math.random() < 0.01 + Math.min(score*0.0008, 0.06)) spawnOrb();
-    }
-
-    function draw(){
-      // фон градиент
-      ctx.clearRect(0,0,w,h);
-
-      // слегка тёмный фон
-      const g = ctx.createLinearGradient(0,0,0,h);
-      g.addColorStop(0, '#041226');
-      g.addColorStop(1, '#02040a');
-      ctx.fillStyle = g;
-      ctx.fillRect(0,0,w,h);
-
-      // звёзды
-      for(const s of stars){
-        const alpha = 0.6 / s.z;
-        ctx.fillStyle = `rgba(210,240,255,${alpha})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
-        ctx.fill();
-      }
-
-      // глубинные светящиеся орбы
-      for(const o of orbs){
-        const glow = Math.max(0.2, 0.6 + Math.sin(o.t*2)*0.3);
-        const rad = o.r;
-        // glow
-        const rg = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, rad*3);
-        rg.addColorStop(0, `rgba(125,243,255,${0.28*glow})`);
-        rg.addColorStop(0.4, `rgba(125,243,255,${0.14*glow})`);
-        rg.addColorStop(1, `rgba(3,6,9,0)`);
-        ctx.fillStyle = rg;
-        ctx.beginPath(); ctx.arc(o.x, o.y, rad*3,0,Math.PI*2); ctx.fill();
-        // core
-        ctx.fillStyle = `rgba(125,243,255,${0.95})`;
-        ctx.beginPath(); ctx.arc(o.x, o.y, rad*0.9,0,Math.PI*2); ctx.fill();
-      }
-
-      // частицы
-      for(const p of particles){
-        const a = Math.max(0, Math.min(1, p.life/60));
-        ctx.fillStyle = `rgba(255,220,200,${a})`;
-        ctx.beginPath(); ctx.arc(p.x, p.y, 2.2,0,Math.PI*2); ctx.fill();
-      }
-
-      // рисуем корабль (минималистично)
-      ctx.save();
-      ctx.translate(player.x, player.y);
-      const ang = Math.atan2(player.vy, player.vx) || player.angle;
-      ctx.rotate(ang + Math.PI/2);
-
-      // thruster glow
-      const thr = Math.min(1, Math.hypot(player.vx, player.vy)/2);
-      const tg = ctx.createRadialGradient(0,18,0,0,18,40);
-      tg.addColorStop(0, `rgba(255,120,60,${0.45*thr})`);
-      tg.addColorStop(1, `rgba(255,120,60,0)`);
-      ctx.fillStyle = tg;
-      ctx.beginPath(); ctx.ellipse(0,18,10,6,0,0,Math.PI*2); ctx.fill();
-
-      // hull
-      ctx.fillStyle = '#dffcff';
-      ctx.beginPath(); ctx.moveTo(0,-14); ctx.lineTo(10,8); ctx.lineTo(0,4); ctx.lineTo(-10,8); ctx.closePath(); ctx.fill();
-
-      // cockpit
-      ctx.fillStyle = '#020a14'; ctx.beginPath(); ctx.ellipse(0,-4,5,3,0,0,Math.PI*2); ctx.fill();
-
-      ctx.restore();
-
-      // subtle HUD center
-      ctx.font = '12px Inter, system-ui, Arial';
-      ctx.fillStyle = 'rgba(255,255,255,0.04)';
-      ctx.textAlign = 'center';
-      ctx.fillText('Dastan.space — Cosmic Explorer', w/2, h-18);
-    }
-
-    // Main loop
-    let last = performance.now();
-    function loop(now){
-      const dt = Math.min(40, now - last);
-      update(dt);
-      draw();
-      last = now;
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
-
-    // Начальный эффект: плавное появление
-    const fade = document.createElement('div');
-    // small accessibility: click to add impulse
-    addEventListener('click', (e)=>{
-      // толчок в сторону курсора
-      const dx = e.clientX - player.x;
-      const dy = e.clientY - player.y;
-      player.vx += dx*0.0006; player.vy += dy*0.0006;
-    });
-
-    // Простая подсказка: если долго не двигаются, появится орб рядом
-    let idle = 0;
-    setInterval(()=>{
-      idle++;
-      if(idle > 7){
-        // spawn nearby
-        const nx = (player.x + (Math.random()-0.5)*200 + w) % w;
-        const ny = (player.y + (Math.random()-0.5)*200 + h) % h;
-        orbs.push({x:nx,y:ny,r: 10 + Math.random()*8, t:0, wobble: Math.random()*10});
-        idle = 0;
-      }
-    }, 1000);
-
-    // reset idle on key
-    addEventListener('keydown', ()=>{ idle = 0; });
-
-    // touch controls: simple joystick
-    let touchStart = null;
-    addEventListener('touchstart', e=>{ touchStart = e.touches[0]; });
-    addEventListener('touchmove', e=>{ if(!touchStart) return; const t = e.touches[0]; const dx = t.clientX - touchStart.clientX; const dy = t.clientY - touchStart.clientY; player.vx += dx*0.0006; player.vy += dy*0.0006; touchStart = t; });
-    addEventListener('touchend', ()=>{ touchStart=null });
-
-    // small helper: focus canvas
-    canvas.tabIndex = 0;
-    canvas.style.outline = 'none';
-    canvas.addEventListener('mouseenter', ()=> canvas.focus());
-
-    // done
   </script>
 </body>
 </html>
