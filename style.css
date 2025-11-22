@@ -1,0 +1,156 @@
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  background-color: #151515;
+  overflow: hidden;
+}
+.h1 {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+.inputs {
+  display: flex;
+  border-radius: 12px;
+  border: 2px solid #ffffff15;
+  background: #ffffff15;
+  width: 225px;
+  margin: 0 auto 20px;
+  justify-content: space-evenly;
+}
+select {
+  padding: 10px 14px;
+  border: none;
+  background: none;
+  color: white;
+  outline: none;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s ease;
+  appearance: none;
+}
+select:hover { background: #ffffff15; }
+option { background-color: #3a3a3a; color: white; }
+button {
+  font-family: Montserrat, sans-serif;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: #151515;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+button:hover {
+  box-shadow: inset 0 0 0 2px #ffffff15;
+  background: #151515;
+  color: white;
+}
+.result {
+  margin-top: 25px;
+  font-size: 18px;
+  line-height: 1.8;
+  background: #ffffff10;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: fit-content; 
+  min-width: 250px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: relative;
+  text-align: left;
+  border: 2px solid #ffffff15;
+}
+.result.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.copyicon {
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: stroke 0.3s ease, transform 0.2s;
+}
+.copyicon:hover { transform: scale(1.1); }
+.copyicon path {
+  fill: none;
+  stroke: white;
+  stroke-width: 1.8;
+  transition: stroke 0.3s ease;
+}
+.copied {
+  position: absolute;
+  top: -37px;
+  right: 5px;
+  background: #00c46a;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  animation: copiedFade 1.2s ease;
+}
+@keyframes copiedFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  20% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+label { display: none; }
+.gmail {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: white;
+  font-size: 13px;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+.gmail:hover { opacity: 1; }
+#day, #month, #year { font-family: Montserrat, sans-serif; }
+#day { border-radius: 10px 0 0 10px; }
+#year { border-radius: 0 10px 10px 0; }
+@keyframes moveright {
+    
+    100% {
+    transform: translateX(9em);
+}
+}
+.d2{
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0.5em;
+    left: calc(-9em - 2px);
+    background-color: #ffffff15;
+    border-radius: 0px 5px 5px 0px;
+    border: 1px solid #ffffff15;
+    padding: 0.4em;
+    animation: moveright 0.5s ease-in-out forwards;
+}
+.ava{
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    border: 1px solid #3a3a3a;
+}
+.ava1{
+    z-index: 2;
+}
+.ava2{
+    margin-left: -0.5em;
+}
