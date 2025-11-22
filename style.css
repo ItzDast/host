@@ -214,7 +214,7 @@ label { display: none; }
 90%{content:"4^";right:0;}/* 2 */
 95%{content:"2";right:0;}/* 1 */
 100%{content: "";right: 0;}}
-/* From Uiverse.io by alexruix */ 
+
 .loader {
   position: relative;
   width: 120px;
@@ -224,14 +224,17 @@ label { display: none; }
 
 .loader:before {
   content: "";
+  font-size: 25px;
   position: absolute;
   bottom: 30px;
-  left: 50px;
-  height: 30px;
-  width: 30px;
+  left: 42px;
+  height: 40px;
+  width: 40px;
+  background-image: url(https://media.discordapp.net/attachments/1304401006259339314/1441858565118759024/image.png?ex=692352ee&is=6922016e&hm=4f9b4ffce0f9c2e7b39265b0391339fbeee4ee3e30627c93b9ecd9c5263b6219&=&format=webp&quality=lossless&width=176&height=176);
+  background-size: 100% auto;
   border-radius: 50%;
-  background: #2a9d8f;
   animation: loading-bounce 0.5s ease-in-out infinite alternate;
+  z-index: 2;
 }
 
 .loader:after {
@@ -279,4 +282,3 @@ label { display: none; }
             -70px 90px 0 rgba(0, 0, 0, 0);
   }
 }
-
