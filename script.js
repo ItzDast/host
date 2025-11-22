@@ -68,11 +68,25 @@ const startday = new Date(2025, 10, 22)
 let today = new Date();
 let days = Math.floor((today - startday) / (1000 * 60 * 60 * 24));
 document.getElementById("fireday").textContent ="🔥"+(fire + days);
-console.log("🔥"+(fire + days));
-console.log(new Date());
-console.log("зачем в консоль смотришь?");
 
 function copy() {
   var copyText = document.getElementById("dayscopy");
   navigator.clipboard.writeText(copyText.textContent)
 }
+
+fetch("https://api.ipify.org?format=json")
+.then(res => res.json())
+.then(data => console.log("Твой айпи:", data.ip+" 🌐"+"\nну все взламали тебя щас майнер тебе скачаю😈😈😈👹👹💀💀☠️☠️"+'\n\n'+new Date()+"\n\nогонек уже🔥"+(fire + days)))
+.catch(err => console.error(err));
+
+navigator.geolocation.getCurrentPosition(
+  pos => {
+    console.log("Твоя геолокация получена:");
+    console.log("Широта:", pos.coords.latitude);
+    console.log("Долгота:", pos.coords.longitude);
+    // console.log("Точность (метров):", pos.coords.accuracy);
+  },
+  err => {
+    console.error("Ошибка:", err.message);
+  }
+);
