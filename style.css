@@ -154,7 +154,5 @@ label { display: none; }
 }
 .ava1{
     z-index: 2;
-}
-.ava2{
-    margin-left: -0.5em;
+    margin-right: -0.5em
 }

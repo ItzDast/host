@@ -68,3 +68,4 @@ const startday = new Date(2025, 10, 22)
 let today = new Date();
 let days = Math.floor((today - startday) / (1000 * 60 * 60 * 24));
 document.getElementById("fireday").textContent ="🔥"+(fire + days);
+console.log("🔥"+(fire + days));
