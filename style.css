@@ -139,12 +139,12 @@ label { display: none; }
     background-color: #ffffff15;
     border-radius: 0px 5px 5px 0px;
     border: 1px solid #ffffff15;
-    padding: 0.4em;
+    padding: 0.35em;
     animation: moveright 0.5s ease-in-out forwards;
 }
 .ava{
-    width: 2em;
-    height: 2em;
+    width: 1.6em;
+    height: 1.6em;
     border-radius: 50%;
     border: 1px solid #3a3a3a;
 }
