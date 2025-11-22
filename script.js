@@ -69,6 +69,7 @@ let today = new Date();
 let days = Math.floor((today - startday) / (1000 * 60 * 60 * 24));
 document.getElementById("fireday").textContent ="🔥"+(fire + days);
 console.log("🔥"+(fire + days));
+console.log(new Date());
 console.log("зачем в консоль смотришь?");
 
 // Source - https://stackoverflow.com/a
@@ -78,4 +79,5 @@ console.log("зачем в консоль смотришь?");
 function copy() {
   var copyText = document.getElementById("dayscopy");
   navigator.clipboard.writeText(copyText.textContent)
+
 }
