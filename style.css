@@ -161,7 +161,7 @@ label { display: none; }
 }
 .ui-btn {
   --btn-padding: 15px 20px;
-  --btn-hover-bg: rgb(51, 51, 51);
+  --btn-active-bg: rgb(51, 51, 51);
   --btn-animation-duration: 1s;
 }
 
@@ -181,15 +181,15 @@ label { display: none; }
   background: inherit;
 }
 
-.ui-btn:hover, .ui-btn:focus {
-  background: var(--btn-hover-bg);
+.ui-btn:active, .ui-btn:focus {
+  background: var(--btn-active-bg);
 }
 
-.ui-btn:hover span, .ui-btn:focus span {
-  color: var(--hover-btn-color);
+.ui-btn:active span, .ui-btn:focus span {
+  color: var(--active-btn-color);
 }
 
-.ui-btn:hover span::before, .ui-btn:focus span::before {
+.ui-btn:active span::before, .ui-btn:focus span::before {
   animation: chitchat linear both var(--btn-animation-duration);
 }
 @keyframes chitchat {
@@ -214,7 +214,6 @@ label { display: none; }
 90%{content:"4^";right:0;}/* 2 */
 95%{content:"2";right:0;}/* 1 */
 100%{content: "";right: 0;}}
-
 /* From Uiverse.io by alexruix */ 
 .loader {
   position: relative;
@@ -280,3 +279,4 @@ label { display: none; }
             -70px 90px 0 rgba(0, 0, 0, 0);
   }
 }
+
