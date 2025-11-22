@@ -36,9 +36,9 @@ function calculateAge() {
   const mText=plural(monthsC,'месяц','месяца','месяцев');
   
   result.querySelector('.result-text').innerHTML = `
-    🗓️ <b>${days.toLocaleString()}</b> дней<br>
+    <div id="dayscopy" onclick="copy()">🗓️ <b>${days.toLocaleString()}</b> дней<br></div>
     📆 ${years} ${yText}, ${monthsC} ${mText}<br>
-    🕓 всего <b>${totalMonths}</b> ${plural(totalMonths,'месяц','месяца','месяцев')}<br>
+    🕓 всего ${totalMonths} ${plural(totalMonths,'месяц','месяца','месяцев')}<br>
     ⏰ ${h.toLocaleString()} часов<br>
     ⏱️ ${min.toLocaleString()} минут<br>
     ⏳ ${s.toLocaleString()} секунд`;
@@ -68,6 +68,14 @@ const startday = new Date(2025, 10, 22)
 let today = new Date();
 let days = Math.floor((today - startday) / (1000 * 60 * 60 * 24));
 document.getElementById("fireday").textContent ="🔥"+(fire + days);
-
 console.log("🔥"+(fire + days));
-console.log("че в консоль смотришь?")
+console.log("зачем в консоль смотришь?");
+
+// Source - https://stackoverflow.com/a
+// Posted by Javad Ebrahimi
+// Retrieved 2025-11-22, License - CC BY-SA 4.0
+
+function copy() {
+  var copyText = document.getElementById("dayscopy");
+  navigator.clipboard.writeText(copyText.textContent)
+}
