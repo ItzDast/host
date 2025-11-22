@@ -130,21 +130,25 @@ label { display: none; }
     transform: translateX(9em);
 }
 }
+#fireday{
+    font-size: 1.25em;
+    margin-bottom: 0.16em;
+}
 .d2{
     display: flex;
     align-items: center;
     position: absolute;
     top: 0.5em;
-    left: calc(-9em - 2px);
+    left: calc(-9em - 1px);
     background-color: #ffffff15;
     border-radius: 0px 5px 5px 0px;
     border: 1px solid #ffffff15;
-    padding: 0.35em;
+    padding: 0.4em;
     animation: moveright 0.5s ease-in-out forwards;
 }
 .ava{
-    width: 1.6em;
-    height: 1.6em;
+    width: 2em;
+    height: 2em;
     border-radius: 50%;
     border: 1px solid #3a3a3a;
 }
