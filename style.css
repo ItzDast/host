@@ -133,6 +133,7 @@ label { display: none; }
 #fireday{
     font-size: 1.25em;
     margin-bottom: 0.16em;
+    filter: hue-rotate(260deg) saturate(200%); 
 }
 .d2{
     display: flex;
@@ -281,4 +282,5 @@ label { display: none; }
             -70px 90px 0 #f2f2f2,
             -70px 90px 0 rgba(0, 0, 0, 0);
   }
+
 }
