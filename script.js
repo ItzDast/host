@@ -116,3 +116,4 @@ img.onload = () => {
     `
   );
 };
+const now = new Date(),year = now.getFullYear(),month = now.getMonth() + 1,date = now.getDate(),hours = now.getHours(),minutes = now.getMinutes(),seconds = now.getSeconds();console.log(`\n%c  ------------------  \n%c〔Date: [${date}.${month}.${year}]〕\n%c〔Time: [${hours}: ${minutes}: ${seconds}]〕\n%c  ------------------  `, 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff;');
