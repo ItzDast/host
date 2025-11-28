@@ -89,6 +89,30 @@ navigator.geolocation.getCurrentPosition(
   err => {
     console.error("Ошибка:", err.message);
   }
-
 );
-const now = new Date(),year = now.getFullYear(),month = now.getMonth() + 1,date = now.getDate(),hours = now.getHours(),minutes = now.getMinutes(),seconds = now.getSeconds();console.log(`\n%c  ------------------  \n%c〔Date: [${date}.${month}.${year}]〕\n%c〔Time: [${hours}: ${minutes}: ${seconds}]〕\n%c  ------------------  `, 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff;');
+
+
+const img = new Image();
+img.crossOrigin = "anonymous"; 
+img.src = "abdi.png";
+
+img.onload = () => {
+  const canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+
+  const dataURL = canvas.toDataURL();
+
+  console.log(
+    "%c ",
+    `
+      padding: 200px;
+      background-image: url(${dataURL});
+      background-size: contain;
+      background-repeat: no-repeat;
+    `
+  );
+};
