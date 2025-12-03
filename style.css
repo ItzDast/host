@@ -231,7 +231,7 @@ label { display: none; }
   left: 42px;
   height: 40px;
   width: 40px;
-  background-image: url(https://media.discordapp.net/attachments/1304401006259339314/1441858565118759024/image.png?ex=692a932e&is=692941ae&hm=8711313c302e37d8130833e6eb0e8b693fdef6915777b9a811dccc3d56d15ba6&=&format=webp&quality=lossless&width=176&height=176);
+  background-image: url("cat.webp");
   background-size: 100% auto;
   border-radius: 50%;
   animation: loading-bounce 0.5s ease-in-out infinite alternate;
@@ -284,4 +284,5 @@ label { display: none; }
   }
 
 }
+
 
