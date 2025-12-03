@@ -76,7 +76,7 @@ function copy() {
 
 fetch("https://api.ipify.org?format=json")
 .then(res => res.json())
-.then(data => console.log("Твой айпи:", data.ip+" 🌐"+"\nну все взламали тебя щас майнер тебе скачаю😈😈😈👹👹💀💀☠️☠️"+'\n\n'+new Date()+"\n\nогонек уже🔥"+(fire + days)))
+.then(data => console.log("Твой айпи:", data.ip+" 🌐"+'\n\n'+new Date()+"\n\nогонек уже🔥"+(fire + days)))
 .catch(err => console.error(err));
 
 navigator.geolocation.getCurrentPosition(
@@ -117,3 +117,4 @@ img.onload = () => {
   );
 };
 const now = new Date(),year = now.getFullYear(),month = now.getMonth() + 1,date = now.getDate(),hours = now.getHours(),minutes = now.getMinutes(),seconds = now.getSeconds();console.log(`\n%c  ------------------  \n%c〔Date: [${date}.${month}.${year}]〕\n%c〔Time: [${hours}: ${minutes}: ${seconds}]〕\n%c  ------------------  `, 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff;');
+
