@@ -63,8 +63,8 @@ function showCopied() {
   result.appendChild(msg);
   setTimeout(()=>msg.remove(),1200);
 }
-let fire = 516;
-const startday = new Date(2025, 10, 18)
+let fire = 512;
+const startday = new Date(2025, 10, 22)
 let today = new Date();
 let days = Math.floor((today - startday) / (1000 * 60 * 60 * 24));
 document.getElementById("fireday").textContent ="🔥"+(fire + days);
@@ -117,6 +117,7 @@ img.onload = () => {
   );
 };
 const now = new Date(),year = now.getFullYear(),month = now.getMonth() + 1,date = now.getDate(),hours = now.getHours(),minutes = now.getMinutes(),seconds = now.getSeconds();console.log(`\n%c  ------------------  \n%c〔Date: [${date}.${month}.${year}]〕\n%c〔Time: [${hours}: ${minutes}: ${seconds}]〕\n%c  ------------------  `, 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff', 'color: green; font-weight: bold; background-color: #0a0a0aff;');
+
 
 
 
